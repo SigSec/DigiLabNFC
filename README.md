@@ -1,5 +1,6 @@
-# DigiLabNFC
-A NFC based login system.
+# DigiLab NFC
+http://www.digilabhub.co.uk/  
+A login system based on NFC.
 
 # Requirements
 nfcpy - https://nfcpy.readthedocs.io/en/latest/  
