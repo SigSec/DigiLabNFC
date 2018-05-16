@@ -6,11 +6,11 @@ Version: 0.0.1 - 21:18 30/04/2018
 
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
-from main import log
+import Main
 
 
 def authorise(credentials_file):
-    log('Authorising PyDrive Google Authentication.')
+    Main.log('Authorising PyDrive Google Authentication.')
     google_auth = GoogleAuth()
     google_auth.LoadCredentialsFile(credentials_file)
     # Check credentials
@@ -29,7 +29,7 @@ def authorise(credentials_file):
 
 
 def push_accounts(auth, accounts):
-    log('Pushing the current Accounts file to Drive.')
+    Main.log('Pushing the current Accounts file to Drive.')
     drive = GoogleDrive(auth)
 
     # Search for the DigiLab Folder.
@@ -42,7 +42,7 @@ def push_accounts(auth, accounts):
 
     # Create a folder if it doesn't already exist.
     if folder_id is None:
-        log('Creating a new DigilabNFC folder')
+        Main.log('Creating a new DigilabNFC folder')
         global folder_id
         folder_metadata = {'title': 'DigiLabNFC', 'mimeType': 'application/vnd.google-apps.folder'}
         folder = drive.CreateFile(folder_metadata)
@@ -53,20 +53,20 @@ def push_accounts(auth, accounts):
     file_list = drive.ListFile({'q': "'%s' in parents and trashed=false" % (folder_id)}).GetList()
     for g_file in file_list:
         if g_file['title'] == 'Accounts.csv':
-            log('Deleting old Accounts.csv file')
+            Main.log('Deleting old Accounts.csv file')
             accounts_file = drive.CreateFile({'id': g_file['id']})
             accounts_file.Delete()
             break
 
     # Upload the Account file
-    log('Uploading new Accounts.csv file')
+    Main.log('Uploading new Accounts.csv file')
     accounts_file = drive.CreateFile({'title': 'Accounts.csv', 'parents': [{'kind': 'drive#fileLink', 'id': folder_id}]})
     accounts_file.SetContentFile(accounts)
     accounts_file.Upload()
 
 
 def pull_accounts(auth):
-    log('Pulling accounts from web.')
+    Main.log('Pulling accounts from web.')
     drive = GoogleDrive(auth)
 
     # Search for the DigiLab Folder.
@@ -80,6 +80,6 @@ def pull_accounts(auth):
     # Check if an Account file already exists.
     file_list = drive.ListFile({'q': "'%s' in parents and trashed=false" % (folder_id)}).GetList()
     for g_file in file_list:
-        if g_file['title'] == 'Accounts.csv':
-            accounts_file = drive.CreateFile({'id': g_file['id']})
+        if g_file['title'] == 'Accounts.csv' and g_file['mimeType'] == 'text/csv':
+            accounts_file = drive.CreateFile({'id': g_file['id'], 'mimeType': g_file['mimeType']})
             return accounts_file.GetContentString()
