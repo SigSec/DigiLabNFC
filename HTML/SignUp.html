@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>DigiLabNFC</title>
+        <meta name="description" content="An interactive getting started guide for Brackets.">
+        <link rel="stylesheet" href="main.css">
+    </head>
+    <body>
+        <img src="../Files/Title.png" alt="DigiLab Logo">
+        <h1>DigiLab Sign In</h1>
+        
+        <form>
+            First name:<br>
+            <input type="text" name="firstname" placeholder="Your name.."><br>
+            Last name:<br>
+            <input type="text" name="lastname" placeholder="Your last name.."><br>
+            Email address:<br>
+            <input type="email" name="email" placeholder="Your email address.."><br>
+            Date of birth:<br>
+            <input type="date" id="dob" name="dob"><br>
+            <p id="test"></p>
+            <input type="submit" value="Submit">
+        </form>
+    </body>
+    <script type="application/javascript">
+        date = new Date();
+        year = date.getFullYear();
+        month = date.getMonth() + 1;
+        day = date.getDate();
+        dateToDisplay = year + "-" + month + "-" + day;
+        document.getElementById("test").innerHTML = dateToDisplay;
+        dob = document.getElementById("dob").value = "2017-06-01";
+    </script>
+</html>
